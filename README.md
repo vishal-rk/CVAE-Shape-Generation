@@ -202,7 +202,6 @@ MIT License - See LICENSE file for details
 
 - Built with PyTorch
 - XAI techniques inspired by DiCE and t-SNE literature
-- Part of IT Security project (BPM)
 
 ## Contact
 
