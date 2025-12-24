@@ -145,6 +145,28 @@ Generates counterfactual explanations using multiple methods:
 - **Architecture Stability**: KL annealing prevents posterior collapse
 - **Latent Space**: Dimension 6 shows consistent geometric feature control
 
+### Sample Outputs
+
+**Generated Samples Across Classes (Epoch 26)**
+
+![Generated Samples](samples/generated_samples_epoch26.png)
+*Model-generated shapes for all 4 classes showing consistent quality and class-specific features.*
+
+**Training Metrics**
+
+![Training Losses](samples/training_losses.png)
+*Loss components (BCE, KL, MSE) across 30 training epochs showing stable convergence.*
+
+**IoU Performance**
+
+![IoU Metrics](samples/iou_metrics.png)
+*Intersection over Union metric progression demonstrating excellent reconstruction quality.*
+
+**Latent Space Traversal**
+
+![Latent Traversal](samples/latent_traversal.png)
+*Smooth interpolation through latent dimension 6 showing learned geometric features.*
+
 ## Key Features
 
 ### Loss Tracking
