@@ -202,6 +202,28 @@ Post-training analysis includes:
 3. **Gradient Clipping**: Max norm of 1.0 prevents exploding gradients
 4. **Checkpointing**: Model saves every epoch, allowing resumption from any point
 
+## Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## Roadmap
+
+- [ ] Add support for color images
+- [ ] Implement β-VAE for better disentanglement
+- [ ] Add more shape classes
+- [ ] Improve XAI visualizations
+- [ ] Create web demo interface
+- [ ] Add pre-trained model downloads
+- [ ] Implement style transfer capabilities
+
+---
+
 ## Citation
 
 If you use this code in your research, please cite:
@@ -223,6 +245,7 @@ MIT License - See LICENSE file for details
 ## Acknowledgments
 
 - Built with PyTorch
+- The VAE research community for foundational work
 - XAI techniques inspired by DiCE and t-SNE literature
 
 ## Contact
