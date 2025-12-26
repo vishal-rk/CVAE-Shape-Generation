@@ -4,7 +4,9 @@ A Conditional Variational Autoencoder (CVAE) implementation for generating and a
 
 ## Overview
 
-This project implements a deep learning model using Conditional Variational Autoencoders to generate 512×512 binary images of geometric shapes. The model supports four shape classes and includes comprehensive XAI analysis tools for understanding model behavior.
+This project implements a deep learning model using a Conditional Variational Autoencoder (CVAE) designed to generate high-resolution geometric shapes with controlled attributes. While traditional VAEs generate samples from a latent space without class specificity, this CVAE integrates conditional information (labels) into both the encoder and decoder, allowing the model to be explicitly directed to produce data of a preferred category.
+
+The project focuses on 512x512 grayscale images of quadrilaterals and includes a comprehensive Explainable AI (XAI) pipeline to interpret the model's latent space and reconstruction capabilities.
 
 ## Features
 
@@ -18,6 +20,52 @@ This project implements a deep learning model using Conditional Variational Auto
   - Latent traversal visualization
 
 ## Architecture
+
+The architecture is a **Convolutional CVAE** following the standard Encoder-Latent Space-Decoder framework.
+
+### 1. Encoder
+* **Structure:** Six convolutional layers with batch normalization and ReLU activations.
+* **Function:** Systematically downsamples the input to capture hierarchical features.
+* **Output:** Produces two vectors: the mean ($\mu$) and log-variance ($\log \sigma^2$) of the latent distribution.
+
+### 2. Latent Space (Reparameterization Trick)
+* **Dimensions:** 100.
+* **Sampling:** To allow backpropagation, the latent vector $z$ is sampled using the reparameterization trick:
+    $$z = \mu + \sigma \cdot \epsilon, \quad \epsilon \sim \mathcal{N}(0,1)$$
+
+### 3. Decoder
+* **Structure:** A fully connected layer followed by six transposed convolutional layers, batch normalization, and ReLU activations.
+* **Output Activation:** A **Sigmoid** activation is used at the final layer to constrain pixel values to $.
+* **Conditioning:** The latent vector $z$ is concatenated with the condition label $y$ to ensure the model generates the correct object type.
+
+## Loss Functions & Optimization
+The model was trained for **30 epochs** using the **Adam optimizer** ($lr=1\times10^{-4}$, batch size=8)[cite: 82]. [cite_start]The total training loss is a combination of reconstruction accuracy and latent regularity.
+
+$$L_{total} = L_{BCE} + L_{KL}$$
+
+### 1. Binary Cross-Entropy (BCE)
+Measures the pixel-wise reconstruction error.
+$$L_{BCE}(x, \hat{x}) = - \sum_{i=1}^{N} [x_i \log(\hat{x}_i) + (1-x_i) \log(1-\hat{x}_i)]$$
+
+### 2. Kullback-Leibler (KL) Divergence
+Regularizes the latent space to approximate a standard Gaussian prior, preventing overfitting.
+$$L_{KL} = -\frac{1}{2} \sum_{j=1}^{d} (1 + \log(\sigma_j^2) - \mu_j^2 - \sigma_j^2)$$
+
+### 3. Intersection over Union Error (IUE)
+Used as a specific geometric metric for validation (not optimization). [cite_start]It captures shape-level structural discrepancies.
+$$IUE = 1 - IoU$$
+
+
+## Explainability (XAI) Pipeline
+To interpret the "black box" nature of the model, two visualization techniques were implemented:
+
+### Latent Traversals
+* **Method:** Systematically varying one latent dimension (from -3 to +3) while keeping others fixed.
+* **Insight:** Reveals that specific dimensions control interpretable attributes such as aspect ratio (Square $\leftrightarrow$ Rectangle), fill status, and edge sharpness.
+### Reconstruction Error Heatmaps
+* **Method:** Visualizes the pixel-wise squared error between the input $x$ and reconstruction $\hat{x}$:
+    $$Error(i,j) = (x_{i,j} - \hat{x}_{i,j})^2$$
+* **Insight:** Unfilled shapes typically show higher error at boundaries (brighter regions in heatmaps) compared to filled shapes, indicating the model works harder to reproduce sharp edges.
 
 - **Encoder**: 6-layer convolutional network with batch normalization
 - **Latent Space**: 100-dimensional latent representation
@@ -60,6 +108,12 @@ pip install -r requirements.txt
 ```
 
 ## Dataset Structure
+
+The model works with a structured geometric dataset categorized into four classes:
+Filled Squares 
+Unfilled Squares 
+Filled Rectangles
+Unfilled Rectangles
 
 The model expects the following directory structure:
 
